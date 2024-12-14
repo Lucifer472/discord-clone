@@ -12,20 +12,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 
-import { useUpdateImage } from "./api/use-update-image";
+import { useSetImage } from "./api/use-set-image";
 import { useLogout } from "./api/use-logout";
-import { useCurrent } from "./api/use-current";
+import { useGetCurrentUser } from "./api/use-get-current-user";
 
 export const UserButton = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const ImageUpdate = useUpdateImage();
-  const { mutate } = useLogout();
-
-  const { data: user } = useCurrent();
+  const { mutate: UpdateImage } = useSetImage();
+  const { mutate: Logout } = useLogout();
+  const { data } = useGetCurrentUser();
 
   const avatarFallback =
-    user && user.email ? user.email.charAt(0).toUpperCase() : "U";
+    data && data.user.email ? data.user.email.charAt(0).toUpperCase() : "U";
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -56,7 +55,7 @@ export const UserButton = () => {
     reader.onload = () => {
       const base64String = reader.result as string;
 
-      ImageUpdate.mutate({
+      UpdateImage({
         json: {
           image: base64String,
         },
@@ -70,13 +69,13 @@ export const UserButton = () => {
     reader.readAsDataURL(file);
   };
 
-  if (!user) return <Loader className="animate-spin" />;
+  if (!data) return <Loader className="animate-spin" />;
 
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger className="outline-none relative">
         <Avatar className="size-10 hover:opacity-75 transition border border-neutral-300">
-          <AvatarImage src={user.image ? user.image : ""} />
+          <AvatarImage src={data.user.image ? data.user.image : undefined} />
           <AvatarFallback className="bg-neutral-200 font-medium text-neutral-500 flex items-center justify-center">
             {avatarFallback}
           </AvatarFallback>
@@ -85,7 +84,7 @@ export const UserButton = () => {
       <DropdownMenuContent
         align="end"
         side="bottom"
-        className="w-60"
+        className="w-60 bg-white"
         sideOffset={10}
       >
         <div className="flex flex-col items-center justify-center gap-2 px-2.5 py-4">
@@ -93,7 +92,7 @@ export const UserButton = () => {
             className="size-[52px]  border border-neutral-300"
             onClick={() => inputRef.current?.click()}
           >
-            <AvatarImage src={user.image ? user.image : ""} />
+            <AvatarImage src={data.user.image ? data.user.image : undefined} />
             <AvatarFallback className="bg-neutral-200 font-medium text-xl text-neutral-500 flex items-center justify-center">
               {avatarFallback}
             </AvatarFallback>
@@ -107,17 +106,17 @@ export const UserButton = () => {
           />
           <div className="flex flex-col items-center justify-center">
             <p className="text-sm font-medium text-neutral-900">
-              {user.name || "User"}
+              {data.user.name || "User"}
             </p>
-            <p className="text-xs text-neutral-500">{user.email}</p>
+            <p className="text-xs text-neutral-500">
+              {data.user.username ? data.user.username : data.user.email}
+            </p>
           </div>
         </div>
-        <Separator />
+        <Separator className="bg-gray-600" />
         <DropdownMenuItem
-          onClick={() => {
-            mutate();
-          }}
-          className="h-10 flex items-center justify-center text-red-600 font-medium cursor-pointer"
+          onClick={() => Logout()}
+          className="h-10 flex items-center justify-center text-red-600 focus:text-red-600 hover:text-red-600 font-medium cursor-pointer hover:bg-white/80 focus:bg-white/80"
         >
           <LogOut className="size-4 mr-2" />
           Log Out

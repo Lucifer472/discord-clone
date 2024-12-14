@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
 
 import { ThemeProvider } from "@/components/provider/theme-provider";
+import { Providers } from "@/components/provider/query-provider";
 import { cn } from "@/lib/utils";
 
 import "./globals.css";
@@ -34,7 +35,7 @@ export default function RootLayout({
           storageKey="discord-theme"
           enableSystem
         >
-          {children}
+          <Providers>{children}</Providers>
         </ThemeProvider>
       </body>
     </html>
