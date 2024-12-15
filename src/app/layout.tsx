@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { ThemeProvider } from "@/components/provider/theme-provider";
 import { Providers } from "@/components/provider/query-provider";
@@ -35,7 +36,9 @@ export default function RootLayout({
           storageKey="discord-theme"
           enableSystem
         >
-          <Providers>{children}</Providers>
+          <Providers>
+            <NuqsAdapter>{children}</NuqsAdapter>
+          </Providers>
         </ThemeProvider>
       </body>
     </html>

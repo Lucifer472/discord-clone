@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { InferRequestType, InferResponseType } from "hono";
 
 import { client } from "@/lib/rpc";
@@ -13,6 +14,7 @@ type RequestType = InferRequestType<
 >;
 
 export const useCreateServer = () => {
+  const router = useRouter();
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async ({ json }) => {
       const response = await client["api"]["server"]["create"]["$post"]({
@@ -24,6 +26,9 @@ export const useCreateServer = () => {
       }
 
       return await response.json();
+    },
+    onSuccess: () => {
+      router.refresh();
     },
   });
 
