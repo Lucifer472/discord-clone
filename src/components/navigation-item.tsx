@@ -7,7 +7,7 @@ import { Hint } from "@/components/hint";
 
 import { cn } from "@/lib/utils";
 
-import { useServerId } from "@/features/servers/hooks/useServerId";
+import { useServerId } from "@/features/servers/hooks/use-server-id";
 
 export const NavigationItem = ({ server }: { server: Server }) => {
   const router = useRouter();

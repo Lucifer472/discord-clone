@@ -66,6 +66,38 @@ const app = new Hono()
     }
 
     return c.json({ data: server }, 200);
+  })
+  .patch("/generate-new-code/:serverId", SessionMiddleware, async (c) => {
+    const user = c.get("user");
+    const { serverId } = c.req.param();
+
+    const server = await getServerWithChannelById(serverId, user.id);
+
+    if (!server) {
+      return c.json({ error: "no server found!" }, 404);
+    }
+
+    const member = server.server.member.find((m) => m.userId === user.id);
+
+    if (!member || member.role !== "ADMIN") {
+      return c.json({ error: "You are not authorized!" }, 400);
+    }
+
+    try {
+      const data = await db.server.update({
+        where: {
+          id: server.server.id,
+        },
+
+        data: {
+          inviteCode: uuidV4(),
+        },
+      });
+
+      return c.json({ data }, 200);
+    } catch (error) {
+      return c.json({ error }, 500);
+    }
   });
 
 export default app;
