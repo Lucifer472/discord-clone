@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { getServerWithChannelById } from "@/data/server";
-import { SessionUser } from "@/lib/session";
+import { SessionUser } from "@/lib/session-user";
 
 import { ServerHeader } from "./server-header";
 
@@ -14,6 +14,7 @@ export const ServerSidebar = async ({ serverId }: { serverId: string }) => {
     return redirect("/");
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { audioChannel, members, server, textChannel, videoChannel } = data;
 
   const role = server.member.find(

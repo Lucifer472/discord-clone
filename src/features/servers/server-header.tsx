@@ -19,7 +19,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 import { useInviteModal } from "./hooks/use-invite-modal";
+import { useEditModal } from "./hooks/use-edit-modal";
+import { useMemberModal } from "./hooks/use-members-modal";
+import { useChannelModal } from "../channels/hooks/use-channel-modal";
+import { useLeaveModal } from "./hooks/use-leave-modal";
+import { useDeleteModal } from "./hooks/use-delete-modal";
 
 export const ServerHeader = ({
   server,
@@ -32,6 +38,11 @@ export const ServerHeader = ({
   const isModerator = isAdmin || role === "MODERATOR";
 
   const { setIsInvite } = useInviteModal();
+  const { setIsEdit } = useEditModal();
+  const { setIsMember } = useMemberModal();
+  const { setIsChannel } = useChannelModal();
+  const { setIsLeave } = useLeaveModal();
+  const { setIsDelete } = useDeleteModal();
 
   return (
     <DropdownMenu>
@@ -52,32 +63,47 @@ export const ServerHeader = ({
           </DropdownMenuItem>
         )}
         {isAdmin && (
-          <DropdownMenuItem className="px-3 py-2 text-sm cursor-pointer">
+          <DropdownMenuItem
+            onClick={() => setIsEdit(true)}
+            className="px-3 py-2 text-sm cursor-pointer"
+          >
             Server Settings
             <SettingsIcon className="size-4 ml-auto" />
           </DropdownMenuItem>
         )}
         {isAdmin && (
-          <DropdownMenuItem className="px-3 py-2 text-sm cursor-pointer">
+          <DropdownMenuItem
+            onClick={() => setIsMember(true)}
+            className="px-3 py-2 text-sm cursor-pointer"
+          >
             Manage Members
             <UsersIcon className="size-4 ml-auto" />
           </DropdownMenuItem>
         )}
         {isModerator && (
-          <DropdownMenuItem className="px-3 py-2 text-sm cursor-pointer">
+          <DropdownMenuItem
+            onClick={() => setIsChannel(true)}
+            className="px-3 py-2 text-sm cursor-pointer"
+          >
             Create Channel
             <PlusCircleIcon className="size-4 ml-auto" />
           </DropdownMenuItem>
         )}
         {isModerator && <DropdownMenuSeparator />}
         {isAdmin && (
-          <DropdownMenuItem className="text-rose-500 px-3 py-2 text-sm cursor-pointer">
+          <DropdownMenuItem
+            onClick={() => setIsDelete(true)}
+            className="text-rose-500 px-3 py-2 text-sm cursor-pointer"
+          >
             Delete Server
             <TrashIcon className="size-4 ml-auto" />
           </DropdownMenuItem>
         )}
         {!isAdmin && (
-          <DropdownMenuItem className="text-rose-500 px-3 py-2 text-sm cursor-pointer">
+          <DropdownMenuItem
+            onClick={() => setIsLeave(true)}
+            className="text-rose-500 px-3 py-2 text-sm cursor-pointer"
+          >
             Leave Server
             <LogOutIcon className="size-4 ml-auto" />
           </DropdownMenuItem>

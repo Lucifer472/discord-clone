@@ -72,6 +72,7 @@ export const getServerWithChannelById = async (id: string, userId: string) => {
     );
 
     const members = server.member.filter((member) => member.userId !== userId);
+    const user = server.member.find((member) => member.userId === userId);
 
     return {
       server,
@@ -79,6 +80,7 @@ export const getServerWithChannelById = async (id: string, userId: string) => {
       audioChannel,
       textChannel,
       members,
+      user,
     };
   } catch {
     return null;

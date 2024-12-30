@@ -1,8 +1,9 @@
 "use client";
-import { z } from "zod";
-import Image from "next/image";
 
 import { useRef } from "react";
+import { z } from "zod";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { ImageIcon } from "lucide-react";
@@ -30,7 +31,6 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 import { ServerSchema } from "./schema";
 import { useCreateServer } from "./api/use-create-server";
-import { useRouter } from "next/navigation";
 
 export const InitialModal = () => {
   const inputRef = useRef<HTMLInputElement>(null);

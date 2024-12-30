@@ -71,7 +71,7 @@ model Server {
   name  String
   image String @db.LongText
 
-  inviteCode String @db.Text
+  inviteCode String @unique
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)

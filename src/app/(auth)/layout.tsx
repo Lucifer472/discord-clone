@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { SessionUser } from "@/lib/session";
+import { SessionUser } from "@/lib/session-user";
 import { LayoutType } from "@/type";
 
 const AuthLayout = async ({ children }: LayoutType) => {

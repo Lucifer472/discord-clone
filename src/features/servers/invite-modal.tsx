@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 
 import { useOrigin } from "./hooks/use-origin";
 import { useInviteModal } from "./hooks/use-invite-modal";
+import { useServerId } from "./hooks/use-server-id";
 
 import { useGetServerById } from "./api/use-get-server-id";
 import { useUpdateServerInviteCode } from "./api/use-update-invite-code";
@@ -30,8 +31,10 @@ export const InviteModal = () => {
 
   const { isInvite, setIsInvite } = useInviteModal();
 
+  const serverId = useServerId();
+
   const { data, refetch, isFetching } = useGetServerById({
-    serverId: isInvite,
+    serverId,
   });
   const { mutate, isPending } = useUpdateServerInviteCode();
 

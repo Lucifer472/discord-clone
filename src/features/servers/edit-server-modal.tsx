@@ -3,7 +3,7 @@ import { z } from "zod";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { ImageIcon } from "lucide-react";
@@ -30,14 +30,21 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 import { ServerSchema } from "./schema";
-import { useCreateServer } from "./api/use-create-server";
-import { useServerModal } from "./hooks/use-server-modal";
 
-export const CreateServerModal = () => {
+import { useEditModal } from "./hooks/use-edit-modal";
+import { useServerId } from "./hooks/use-server-id";
+
+import { useGetServerById } from "./api/use-get-server-id";
+import { useUpdateServer } from "./api/use-update-server";
+
+export const EditServerModal = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-  const { mutate, isPending } = useCreateServer();
-  const { isServer, setIsServer } = useServerModal();
+  const serverId = useServerId();
+
+  const { data } = useGetServerById({ serverId });
+  const { mutate, isPending } = useUpdateServer();
+  const { isEdit, setIsEdit } = useEditModal();
 
   const form = useForm<z.infer<typeof ServerSchema>>({
     resolver: zodResolver(ServerSchema),
@@ -46,6 +53,12 @@ export const CreateServerModal = () => {
       image: "",
     },
   });
+  useEffect(() => {
+    if (data) {
+      form.setValue("name", data.data.server.name);
+      form.setValue("image", data.data.server.image);
+    }
+  }, [data, form]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -92,13 +105,14 @@ export const CreateServerModal = () => {
           name: v.name,
           image: v.image ? v.image : "",
         },
+        param: {
+          serverId,
+        },
       },
       {
         onSuccess: () => {
-          form.reset();
-          toast.success("Server Created!");
+          toast.success("Server Updated!");
           router.refresh();
-          setIsServer(false);
         },
         onError: (res) => {
           toast.error(res.message);
@@ -108,11 +122,11 @@ export const CreateServerModal = () => {
   };
 
   return (
-    <Dialog open={isServer} onOpenChange={setIsServer}>
+    <Dialog open={isEdit} onOpenChange={setIsEdit}>
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl font-bold text-center">
-            Create you are server
+            Customize you are server
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
             Give you are server personality with a name and image you can always
@@ -218,7 +232,7 @@ export const CreateServerModal = () => {
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
               <Button variant={"primary"} disabled={isPending}>
-                Create
+                Save
               </Button>
             </DialogFooter>
           </form>

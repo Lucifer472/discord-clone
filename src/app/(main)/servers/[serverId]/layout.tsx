@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import { LayoutType } from "@/type";
 
+import { SessionUser } from "@/lib/session-user";
 import { getServerById } from "@/data/server";
-import { SessionUser } from "@/lib/session";
 
 import { ServerSidebar } from "@/features/servers/server-sidebar";
 

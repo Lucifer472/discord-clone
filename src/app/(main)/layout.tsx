@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { LayoutType } from "@/type";
 
-import { SessionUser } from "@/lib/session";
+import { SessionUser } from "@/lib/session-user";
 
 import { NavigationSidebar } from "@/components/navigation";
 import { ModalProvider } from "@/components/provider/modal-provider";

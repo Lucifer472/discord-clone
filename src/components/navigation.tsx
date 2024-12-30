@@ -1,4 +1,4 @@
-import { SessionUser } from "@/lib/session";
+import { SessionUser } from "@/lib/session-user";
 
 import { findManyServerByUserId } from "@/data/server";
 

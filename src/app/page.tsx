@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
 
 import { getFirstServerByUserId } from "@/data/server";
-import { SessionUser } from "@/lib/session";
 
 import { InitialModal } from "@/features/servers/initial-modal";
 import { UsernameModal } from "@/features/auth/username-model";
+import { SessionUser } from "@/lib/session-user";
 
 const SetupPage = async () => {
   const user = await SessionUser();

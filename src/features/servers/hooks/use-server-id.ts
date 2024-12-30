@@ -7,5 +7,5 @@ export const useServerId = () => {
     return params.serverId;
   }
 
-  return;
+  return "";
 };
